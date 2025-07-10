@@ -1,0 +1,89 @@
+*{
+    margin: 0px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+
+input, textarea{
+    background-color: hsl(308, 93%, 89%);
+    border: none;
+    border-radius: 5px;
+}
+
+.left-box{
+    padding: 10px;
+    /* margin-bottom: 0px; */
+    
+  
+}
+
+.left-box h2{
+    margin-bottom: 10px;
+}
+.left-box .calculationInterpretations{
+    color: green;
+    font-weight: 700;
+}
+
+.item1{
+    max-width: auto; 
+    margin: "20px"; 
+    padding: 20; 
+    background-color: hsl(308, 100%, 80%);
+}
+.item2{
+    max-width: auto; 
+    margin: "20px"; 
+    padding: 20; 
+    background-color: hsl(273, 100%, 80%);
+}
+.item3{
+    max-width: auto; 
+    margin: "20px"; 
+    padding: 20; 
+    background-color: hsl(202, 100%, 80%);
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  gap: 10px;
+  /* background-color: dodgerblue; */
+  /* padding: 10px; */
+}
+fieldset{
+    border-color: hsl(308, 100%, 67%);
+    border-style: solid;
+}
+fieldset input{
+    margin-bottom: 10px;
+}
+
+
+.pad-container {
+  background-image: url("/header.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top;
+  position: relative;
+  z-index: 1;
+  /* padding: 20px; */
+  /* color: #000; */
+  background-size: 100%;
+  border: none;
+}
+/* 
+.prescription-container * {
+  position: relative;
+  z-index: 2;
+} */
+
+
+
