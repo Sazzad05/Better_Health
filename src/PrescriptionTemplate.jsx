@@ -60,7 +60,7 @@ export default function PrescriptionTemplate({
       className="pad-container"
       style={{
         width: "210mm",
-        maxHeight: "297mm",
+        minHeight: "297mm",
         padding: "10mm 5mm 10mm 5mm",
         backgroundColor: "#fff",
         fontFamily: "Arial, sans-serif",
@@ -95,14 +95,8 @@ export default function PrescriptionTemplate({
           </div>
         </div>
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-start",
-          }}
-        >
-          <div style={{ flex: 1, marginRight: 20 }}>
+        <div>
+          <div style={{marginRight: 20 }}>
             <h3 style={{ margin: 0 }}>
               {doctorName},
               <br />
@@ -116,8 +110,34 @@ export default function PrescriptionTemplate({
               {doctorCertification2} <br />
               {doctorPhone} | &ensp;
               {doctorEmail}
+              
             </p>
           </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "flex-start",
+                  padding: "3mm 0 3mm 5px",
+                  backgroundColor:"#032e5b",
+                  borderRadius:"10px",
+                  color:"white",
+                  marginTop:"5px 0 5px 0",
+                }}
+              >
+                <div style={{ flex: "1 1 80mm "}}>
+                  <strong>Name:</strong> {patientName || "N/A"}
+                </div>
+                <div style={{ flex: "1 1 50mm "}}>
+                  <strong>Phone:</strong> {patientPhone || "N/A"}
+                </div>
+                <div style={{ flex: "1 1 25mm "}}>
+                  <strong>Age:</strong> {age || "--"}
+                </div>
+                <div style={{ flex: "1 1 30mm "}}>
+                  <strong>Gender:</strong> {gender || "--"}
+                </div>
+              </div>
         </div>
       </header>
 
@@ -135,13 +155,8 @@ export default function PrescriptionTemplate({
         >
           <h3>Patient Profile</h3>
           <p style={{ margin: 10 }}>
-            <strong>Name:</strong> {patientName || "N/A"} <br />
-            <strong>Phone:</strong> {patientPhone || "N/A"} <br />
             <strong>Weight:</strong> {weight || "--"} kg<br />
-            <strong>Height:</strong> {formattedHeight || "--"}
-            <br />
-            <strong>Age:</strong> {age || "--"}<br />
-            <strong>Gender:</strong> {gender || "--"}<br />
+            <strong>Height:</strong> {formattedHeight || "--"}<br />
             <strong>Waist:</strong> {bodyMeasurements?.waist || "--"} inch<br />
             <strong>Hips:</strong> {bodyMeasurements?.hips || "--"} inch<br />
             <strong>Chest:</strong> {bodyMeasurements?.chest || "--"} inch<br />

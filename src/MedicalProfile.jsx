@@ -1,23 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-// List of common diseases
-const commonDiseases = [
-  "Diabetes",
-  "Hypertension",
-  "High Cholesterol",
-  "Thyroid Issues",
-  "Heart Disease",
-  "Kidney Disease",
-  "Gastric/Ulcer",
-  "Asthma",
-  "PCOS",
-  "Anemia",
-  "Arthritis",
-  "Obesity",
-  "Other",
-];
+const url =
+  "https://script.google.com/macros/s/AKfycbxeKiP7lI4_ht6xmkvcZqgdawMmjgQ0lKTB_rAiEwIJ_lEYOPcZe1Sy95B-LQXkVL3U/exec";
 
 export default function MedicalProfile({ data, setData }) {
+  const [commonDiseases, setCommonDiseases] = useState([]);
+
+  useEffect(() => {
+    fetch(url)
+      .then((res) => res.json())
+      .then((raw) => {
+        if (!Array.isArray(raw)) {
+          console.error("Expected an array, got:", raw);
+          return;
+        }
+
+        const uniqueDiseases = [...new Set(raw.map((row) => row.Disease?.trim()))]
+          .filter(Boolean)
+          .sort();
+
+        setCommonDiseases(uniqueDiseases);
+      })
+      .catch((err) => console.error("Error fetching diseases:", err));
+  }, []);
+
   const handleCheckboxChange = (e) => {
     const value = e.target.value;
     const checked = e.target.checked;
@@ -44,80 +50,23 @@ export default function MedicalProfile({ data, setData }) {
             marginTop: 10,
           }}
         >
-          {commonDiseases.map((disease) => (
-            <label key={disease} style={{ width: "200px" }}>
-              <input
-                type="checkbox"
-                value={disease}
-                checked={(data.existingDiseases || []).includes(disease)}
-                onChange={handleCheckboxChange}
-              />{" "}
-              {disease}
-            </label>
-          ))}
+          {commonDiseases.length === 0 ? (
+            <p>Loading diseases...</p>
+          ) : (
+            commonDiseases.map((disease) => (
+              <label key={disease} style={{ width: "200px" }}>
+                <input
+                  type="checkbox"
+                  value={disease}
+                  checked={(data.existingDiseases || []).includes(disease)}
+                  onChange={handleCheckboxChange}
+                />{" "}
+                {disease}
+              </label>
+            ))
+          )}
         </div>
       </div>
-
-      {/* Current Symptoms */}
-      {/* <label>
-        Current Symptoms:
-        <textarea
-          value={data.currentSymptoms || ""}
-          onChange={(e) =>
-            setData({ ...data, currentSymptoms: e.target.value })
-          }
-          style={{width: "100%", padding: "5px 0px 5px 5px"}}
-          placeholder="Describe current symptoms..."
-        />
-      </label>
-
-      <br />
-      <br /> */}
-
-      {/* Medications */}
-      {/* <label>
-        Medications:
-        <textarea
-          value={data.medications || ""}
-          onChange={(e) =>
-            setData({ ...data, medications: e.target.value })
-          }
-          style={{width: "100%", padding: "5px 0px 5px 5px"}}
-          placeholder="List any ongoing medications..."
-        />
-      </label>
-
-      <br />
-      <br /> */}
-
-      {/* Allergies */}
-      {/* <label>
-        Allergies:
-        <textarea
-          value={data.allergies || ""}
-          onChange={(e) =>
-            setData({ ...data, allergies: e.target.value })
-          }
-          style={{width: "100%", padding: "5px 0px 5px 5px"}}
-          placeholder="Mention food/medicine allergies if any..."
-        />
-      </label>
-
-      <br />
-      <br /> */}
-
-      {/* Family Medical History */}
-      {/* <label>
-        Family Medical History:
-        <textarea
-          value={data.familyMedicalHistory || ""}
-          onChange={(e) =>
-            setData({ ...data, familyMedicalHistory: e.target.value })
-          }
-          style={{width: "100%", padding: "5px 0px 5px 5px"}}
-          placeholder="E.g., diabetes in parents, hypertension, etc."
-        />
-      </label> */}
     </section>
   );
 }

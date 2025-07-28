@@ -96,7 +96,6 @@ export default function App() {
 
         {/* Right Section */}
         <div className="item2">
-          
           <MedicalProfile data={medicalProfile} setData={setMedicalProfile} />
 
           <PrescribeDiet dietPlan={dietPlan} setDietPlan={setDietPlan} /> {/* NEW */}
