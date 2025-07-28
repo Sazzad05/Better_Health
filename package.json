@@ -1,4 +1,5 @@
 {
+  "homepage": "https://Sazzad05.github.io/Better_Health",
   "name": "health-app",
   "private": true,
   "version": "0.0.0",
@@ -7,7 +8,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "html2canvas": "^1.4.1",
