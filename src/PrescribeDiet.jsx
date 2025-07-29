@@ -1,55 +1,9 @@
 import React, { useState, useEffect } from "react";
 
+const API_BASE =
+  "https://script.google.com/macros/s/AKfycbySbEZ_WEp5ShSPQcg_BoHF-K-6I-ovMVLWdQ7iFGOfJjTiuDWi_45fuLq37gZht-ZH/exec";
 
-const timeOptions = [
-  "Pre-morning",
-  "Morning",
-  "Mid-Morning",
-  "Noon",
-  "Afternoon",
-  "Evening",
-  "Night",
-  "Before-Sleep",
-];
-
-const defaultTimeBySlot = {
-  "Pre-morning": "06:00",
-  Morning: "09:00",
-  "Mid-Morning": "11:30",
-  Noon: "12:00",
-  Afternoon: "14:00",
-  Evening: "18:00",
-  Night: "21:00",
-  "Before-Sleep": "23:30",
-};
-
-const defaultFoodBySlot = {
-  "Pre-morning": [{ food: "Warm water", quantity: "1", unit: "glass", description: "" }],
-  Morning: [
-    { food: "Oats", quantity: "1", unit: "cup", description: "" },
-    { food: "Boiled Egg", quantity: "1", unit: "piece", description: "" },
-  ],
-  Noon: [{ food: "Rice", quantity: "1", unit: "cup", description: "" }],
-  Afternoon: [{ food: "Fruit", quantity: "1", unit: "piece", description: "" }],
-  Evening: [{ food: "Green Tea", quantity: "1", unit: "cup", description: "" }],
-  Night: [{ food: "Chapati", quantity: "2", unit: "piece", description: "" }],
-};
-
-const allSuggestedFoods = [
-  "Warm water",
-  "Oats",
-  "Boiled Egg",
-  "Rice",
-  "Fruit",
-  "Green Tea",
-  "Chapati",
-  "Vegetable Curry",
-  "Lentil Soup",
-  "Chicken Breast",
-  "Banana",
-  "Milk",
-  "Salad",
-];
+const generalUnits = ["spoon", "cup", "glass", "ml", "piece", "gm"];
 
 const unitOptionsByFood = {
   "Warm water": ["glass", "ml"],
@@ -67,19 +21,79 @@ const unitOptionsByFood = {
   Salad: ["cup", "gm"],
 };
 
-const generalUnits = ["spoon", "cup", "glass", "ml", "piece", "gm"];
-
 export default function PrescribeDiet({ dietPlan, setDietPlan }) {
-  const [timeSlot, setTimeSlot] = useState("Morning");
-  const [time, setTime] = useState(defaultTimeBySlot["Morning"]);
-  const [items, setItems] = useState(defaultFoodBySlot["Morning"]);
+  const [timeOptions, setTimeOptions] = useState([]);
+  const [defaultTimeBySlot, setDefaultTimeBySlot] = useState({});
+  const [defaultFoodBySlot, setDefaultFoodBySlot] = useState({});
+  const [foodSuggestions, setFoodSuggestions] = useState([]);
+
+  const [timeSlot, setTimeSlot] = useState("");
+  const [time, setTime] = useState("");
+  const [items, setItems] = useState([{ food: "", quantity: "", unit: "", description: "" }]);
   const [editIndex, setEditIndex] = useState(null);
 
-  useEffect(() => {
-    setTime(defaultTimeBySlot[timeSlot] || "");
-    setItems(defaultFoodBySlot[timeSlot] || [{ food: "", quantity: "", unit: "cup", description: "" }]);
-  }, [timeSlot]);
+  // Convert sheet time format to "HH:mm" string
+  const convertToTimeString = (value) => {
+    const d = new Date(value);
+    if (!isNaN(d)) {
+      const hh = d.getHours().toString().padStart(2, "0");
+      const mm = d.getMinutes().toString().padStart(2, "0");
+      return `${hh}:${mm}`;
+    }
+    // fallback if not a date string
+    return value || "08:00";
+  };
 
+  // Fetch sheet data once on mount
+  useEffect(() => {
+    fetch(`${API_BASE}?sheet=SuggestedDiet`)
+      .then((res) => res.json())
+      .then((data) => {
+        const slots = [];
+        const timeMap = {};
+        const foodMap = {};
+        const allFoodsSet = new Set();
+
+        data.forEach((row) => {
+          const slot = row.TimeSlot;
+          const timeStr = row.Time;
+          const foodItem = {
+            food: row.Food,
+            quantity: row.Quantity,
+            unit: row.Unit,
+            description: row.Description || "",
+          };
+
+          if (!slots.includes(slot)) slots.push(slot);
+          if (!foodMap[slot]) foodMap[slot] = [];
+          foodMap[slot].push(foodItem);
+          timeMap[slot] = convertToTimeString(timeStr);
+
+          allFoodsSet.add(row.Food);
+        });
+
+        setTimeOptions(slots);
+        setDefaultTimeBySlot(timeMap);
+        setDefaultFoodBySlot(foodMap);
+        setFoodSuggestions(Array.from(allFoodsSet));
+
+        if (slots.length > 0) {
+          setTimeSlot(slots[0]);
+          setTime(timeMap[slots[0]] || "");
+          setItems(foodMap[slots[0]] || [{ food: "", quantity: "", unit: "", description: "" }]);
+        }
+      })
+      .catch((err) => console.error("Fetch error:", err));
+  }, []);
+
+  // When timeSlot changes, update form fields from defaults
+  useEffect(() => {
+    if (!timeSlot) return;
+    setTime(defaultTimeBySlot[timeSlot] || "");
+    setItems(defaultFoodBySlot[timeSlot] || [{ food: "", quantity: "", unit: "", description: "" }]);
+  }, [timeSlot, defaultTimeBySlot, defaultFoodBySlot]);
+
+  // Update item field and fix unit if food changes
   const updateItem = (index, field, value) => {
     const updated = [...items];
     updated[index][field] = value;
@@ -94,23 +108,25 @@ export default function PrescribeDiet({ dietPlan, setDietPlan }) {
   };
 
   const addItem = () => {
-    setItems([...items, { food: "", quantity: "", unit: "cup", description: "" }]);
+    setItems([...items, { food: "", quantity: "", unit: "", description: "" }]);
   };
 
   const removeItem = (index) => {
+    if (items.length <= 1) return; // prevent removing last item
     setItems(items.filter((_, i) => i !== index));
   };
 
   const resetForm = () => {
-    setTimeSlot("Morning");
-    setTime(defaultTimeBySlot["Morning"]);
-    setItems(defaultFoodBySlot["Morning"]);
+    setTimeSlot(timeOptions[0] || "");
+    setTime(defaultTimeBySlot[timeOptions[0]] || "");
+    setItems(defaultFoodBySlot[timeOptions[0]] || [{ food: "", quantity: "", unit: "", description: "" }]);
     setEditIndex(null);
   };
 
   const addToDietPlan = () => {
     if (!timeSlot || !time || items.some((i) => !i.food || !i.quantity)) {
-      return alert("Please fill all fields.");
+      alert("Please fill all fields.");
+      return;
     }
 
     const newSlot = { timeSlot, time, items };
@@ -120,7 +136,7 @@ export default function PrescribeDiet({ dietPlan, setDietPlan }) {
       updated[editIndex] = newSlot;
       setDietPlan(updated);
     } else {
-      setDietPlan((prev) => [...prev, newSlot]);
+      setDietPlan([...dietPlan, newSlot]);
     }
 
     resetForm();
@@ -175,7 +191,10 @@ export default function PrescribeDiet({ dietPlan, setDietPlan }) {
       {items.map((item, index) => {
         const allowedUnits = unitOptionsByFood[item.food] || generalUnits;
         return (
-          <div key={index} style={{ marginBottom: 10, display: "flex", alignItems: "center", flexWrap: "wrap" }}>
+          <div
+            key={index}
+            style={{ marginBottom: 10, display: "flex", alignItems: "center", flexWrap: "wrap" }}
+          >
             <input
               type="text"
               placeholder="Food name"
@@ -185,7 +204,7 @@ export default function PrescribeDiet({ dietPlan, setDietPlan }) {
               style={{ marginRight: 10, padding: 5 }}
             />
             <datalist id="food-suggestions">
-              {allSuggestedFoods.map((food) => (
+              {foodSuggestions.map((food) => (
                 <option key={food} value={food} />
               ))}
             </datalist>
@@ -213,7 +232,7 @@ export default function PrescribeDiet({ dietPlan, setDietPlan }) {
             <input
               type="text"
               placeholder="Description"
-              value={item.description || ""}
+              value={item.description}
               onChange={(e) => updateItem(index, "description", e.target.value)}
               style={{ marginRight: 10, padding: 5, width: 180 }}
             />

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 
+const sheet = "SuggestedFood";
 const url =
-  "https://script.google.com/macros/s/AKfycbxeKiP7lI4_ht6xmkvcZqgdawMmjgQ0lKTB_rAiEwIJ_lEYOPcZe1Sy95B-LQXkVL3U/exec";
+  `https://script.google.com/macros/s/AKfycbxeKiP7lI4_ht6xmkvcZqgdawMmjgQ0lKTB_rAiEwIJ_lEYOPcZe1Sy95B-LQXkVL3U/exec?sheet=${sheet}`;
 
 export default function MedicalProfile({ data, setData }) {
   const [commonDiseases, setCommonDiseases] = useState([]);

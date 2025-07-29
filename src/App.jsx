@@ -135,7 +135,7 @@ export default function App() {
             doctorCertification1="Certification in CCND (BADN)"
             doctorCertification2="Certified Fitness and Nutrition Coach ( NESTA - California, USA)"
             doctorPhone="☏ 01940175796"
-            doctorEmail="✉︎ tasmiatisha143@gmail.com"
+            doctorEmail="✉ tasmiatisha143@gmail.com"
             patientName={personalDetails.patientName}
             patientAge={personalDetails.age}
             patientGender={personalDetails.gender}
