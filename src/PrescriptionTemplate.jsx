@@ -3,6 +3,8 @@ import BasicHealthMetrics from "./BasicHealthMetrics";
 import DiseaseBasedFoodSuggestions from "./DiseaseBasedFoodSuggestions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhoneVolume , faEnvelope } from "@fortawesome/free-solid-svg-icons"; 
+import logo from "./assets/healthyouLogo.png";
+
 
 export default function PrescriptionTemplate({
   personalDetails,
@@ -105,7 +107,7 @@ export default function PrescriptionTemplate({
             </p>
           </div>
           <div style={{ flex: 1, textAlign: "right",maxWidth: "70mm" }}>
-            <img src="./Public/healthyouLogo.png" alt="" /> <br />
+            <img src={logo} alt="Health You Logo" /> <br />
             <strong>Date:</strong> {date} <br />
             <strong>Patient ID:</strong> {String(patientId).padStart(7, "0")}
           </div>

@@ -2,6 +2,8 @@ import React from 'react'
 import PdfExporter from './PdfExporter'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faForward , faPenToSquare } from "@fortawesome/free-solid-svg-icons"; 
+import logo from "./assets/healthyouLogo.png";
+
 
 
 
@@ -21,7 +23,7 @@ const NavHead = ({ pdfRef,onNextPatient }) => {
             padding: "0 20px",
             boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
           }}>
-            <img src="./public/healthyouLogo.png" alt="" />
+            <img src={logo} alt="Health You Logo" />
             {/* <h1>Health & Nutrition Dashboard</h1> */}
             <div>
             <PdfExporter targetRef={pdfRef} />
