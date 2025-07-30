@@ -280,10 +280,10 @@ export default function PrescribeDiet({ dietPlan, setDietPlan }) {
                   </li>
                 ))}
               </ul>
-              <button onClick={() => handleEdit(index)} style={{ marginRight: 10 }}>
+              <button onClick={() => handleEdit(index)} style={{ padding: "5px 10px", backgroundColor: "#fffb00ff", color: "Black", border: "none" }}>
                 Edit
               </button>
-              <button onClick={() => handleDelete(index)} style={{ color: "#c0392b" }}>
+              <button onClick={() => handleDelete(index)} style={{ padding: "5px 10px", backgroundColor: "#e74c3c", color: "white", border: "none" }}>
                 Delete
               </button>
             </div>

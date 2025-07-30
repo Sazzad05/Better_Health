@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import "./App.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import PersonalDetails from "./PersonalDetails";
 import MedicalProfile from "./MedicalProfile";
@@ -9,6 +10,7 @@ import PdfExporter from "./PdfExporter";
 import PrescriptionTemplate from "./PrescriptionTemplate";
 import Prescription from "./Prescription";
 import PrescribeDiet from "./PrescribeDiet"; // NEW IMPORT
+import NavHead from "./NavHead";
 
 export default function App() {
   const [patientCounter, setPatientCounter] = useState(1);
@@ -85,7 +87,7 @@ export default function App() {
 
   return (
     <>
-      <h1>Health & Nutrition Dashboard</h1>
+      <NavHead pdfRef={pdfRef} onNextPatient={handleNextPatient}/>
 
       <div className="grid-container">
         {/* Left Section */}
@@ -99,20 +101,6 @@ export default function App() {
           <MedicalProfile data={medicalProfile} setData={setMedicalProfile} />
 
           <PrescribeDiet dietPlan={dietPlan} setDietPlan={setDietPlan} /> {/* NEW */}
-
-          {/* <Prescription /> */}
-
-          {/* Bottom Section - PDF Export */}
-          <div style={{ marginTop: "20px" }}>
-            <PdfExporter targetRef={pdfRef} />
-          </div>
-
-          <button
-            onClick={handleNextPatient}
-            style={{ marginTop: 30, padding: "10px 20px", fontSize: 16 }}
-          >
-            Next Patient
-          </button>
         </div>
 
         {/* PDF Content */}
@@ -134,8 +122,8 @@ export default function App() {
             doctordegree2="MSc in Food and Nutrition."
             doctorCertification1="Certification in CCND (BADN)"
             doctorCertification2="Certified Fitness and Nutrition Coach ( NESTA - California, USA)"
-            doctorPhone="☏ 01940175796"
-            doctorEmail="✉ tasmiatisha143@gmail.com"
+            doctorPhone="01940175796"
+            doctorEmail="tasmiatisha143@gmail.com"
             patientName={personalDetails.patientName}
             patientAge={personalDetails.age}
             patientGender={personalDetails.gender}

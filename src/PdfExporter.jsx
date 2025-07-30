@@ -1,6 +1,9 @@
 // PdfExporter.jsx
 import React from "react";
 import html2canvas from "html2canvas";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPrint } from "@fortawesome/free-solid-svg-icons"; 
+
 
 export default function PdfExporter({ targetRef }) {
   const handlePrint = async () => {
@@ -45,8 +48,9 @@ export default function PdfExporter({ targetRef }) {
   };
 
   return (
-    <button onClick={handlePrint} style={{ marginTop: "20px", padding: "10px 20px", fontSize: "16px" }}>
-      Print PDF Section
+    
+    <button onClick={handlePrint}>
+      <FontAwesomeIcon icon={faPrint} style={{ marginRight: "6px" }} /> Print PDF
     </button>
   );
 }

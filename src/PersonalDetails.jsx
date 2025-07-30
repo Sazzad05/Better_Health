@@ -20,7 +20,7 @@ export default function PersonalDetails({ data, setData }) {
             type="text"
             value={String(data.patientId).padStart(7, '0')} // 👈 7-digit formatting
             readOnly
-            style={{ marginLeft: 10, padding: 5, width: 120, background: "#0f0f0f", color: "white" }}
+            style={{ marginLeft: 10, padding: 5, width: 120, background: "#9b114f", color: "white" }}
         />
       </label>
 

@@ -1,6 +1,8 @@
 import React from "react";
 import BasicHealthMetrics from "./BasicHealthMetrics";
 import DiseaseBasedFoodSuggestions from "./DiseaseBasedFoodSuggestions";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPhoneVolume , faEnvelope } from "@fortawesome/free-solid-svg-icons"; 
 
 export default function PrescriptionTemplate({
   personalDetails,
@@ -61,7 +63,7 @@ export default function PrescriptionTemplate({
       style={{
         width: "210mm",
         minHeight: "297mm",
-        padding: "10mm 5mm 10mm 5mm",
+        padding: "5mm 5mm 5mm 5mm",
         backgroundColor: "#fff",
         fontFamily: "Arial, sans-serif",
         color: "#000",
@@ -74,8 +76,6 @@ export default function PrescriptionTemplate({
       {/* Header */}
       <header
         style={{
-          borderBottom: "1px solid #999",
-          paddingBottom: 10,
           marginBottom: 20,
         }}
       >
@@ -86,17 +86,7 @@ export default function PrescriptionTemplate({
             alignItems: "flex-start",
           }}
         >
-          <div style={{ flex: 1, marginRight: 20 }}>
-            <h1 style={{ margin: 0 }}>{clinicName}</h1>
-          </div>
-          <div style={{ flex: 1, textAlign: "right", color: "#fff" }}>
-            <strong>Date:</strong> {date} <br />
-            <strong>Patient ID:</strong> {String(patientId).padStart(7, "0")}
-          </div>
-        </div>
-
-        <div>
-          <div style={{marginRight: 20 }}>
+          <div style={{ flex: 1, marginRight: 20,color:"white" }}>
             <h3 style={{ margin: 0 }}>
               {doctorName},
               <br />
@@ -108,21 +98,29 @@ export default function PrescriptionTemplate({
               {doctordegree2} <br />
               {doctorCertification1} | &ensp;
               {doctorCertification2} <br />
+              <FontAwesomeIcon icon={faPhoneVolume} style={{ marginRight: "6px" }} />
               {doctorPhone} | &ensp;
-              {doctorEmail}
-              
+               <FontAwesomeIcon icon={faEnvelope} style={{ marginRight: "6px" }} />
+               {doctorEmail}
             </p>
           </div>
+          <div style={{ flex: 1, textAlign: "right",maxWidth: "70mm" }}>
+            <img src="./Public/healthyouLogo.png" alt="" /> <br />
+            <strong>Date:</strong> {date} <br />
+            <strong>Patient ID:</strong> {String(patientId).padStart(7, "0")}
+          </div>
+        </div>
+
               <div
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "flex-start",
                   padding: "3mm 0 3mm 5px",
-                  backgroundColor:"#032e5b",
+                  backgroundColor:"hsla(330, 66%, 77%, 1.00)",
                   borderRadius:"10px",
-                  color:"white",
-                  marginTop:"5px 0 5px 0",
+                  color:"rgba(139, 15, 71, 1)",
+                  marginTop:"10px",
                 }}
               >
                 <div style={{ flex: "1 1 80mm "}}>
@@ -138,7 +136,6 @@ export default function PrescriptionTemplate({
                   <strong>Gender:</strong> {gender || "--"}
                 </div>
               </div>
-        </div>
       </header>
 
       {/* Body: 2 columns */}
@@ -150,7 +147,7 @@ export default function PrescriptionTemplate({
             borderRight: "1px solid #999",
             paddingRight: 20,
             boxSizing: "border-box",
-            maxWidth: "80mm",
+            maxWidth: "70mm",
           }}
         >
           <h3>Patient Profile</h3>
@@ -201,7 +198,7 @@ export default function PrescriptionTemplate({
               {dietPlan.map((slot, index) => (
                 <div key={index} style={{ marginBottom: 10 }}>
                   ⏰ <strong>{slot.timeSlot}</strong> at{" "}
-                  {formatTime12(slot.time)}
+                  <b>{formatTime12(slot.time)}</b>
                   <ul style={{ marginTop: 5 }}>
                     {slot.items.map((item, i) => (
                       <li key={i}>

@@ -11,8 +11,8 @@ input::-webkit-inner-spin-button {
 }
 
 
-input, textarea{
-    background-color: hsl(308, 93%, 89%);
+input, textarea, select{
+    background-color: rgb(230, 190, 209);
     border: none;
     border-radius: 5px;
 }
@@ -36,13 +36,13 @@ input, textarea{
     max-width: auto; 
     margin: "20px"; 
     padding: 20; 
-    background-color: hsl(308, 100%, 80%);
+    background-color: hsla(330, 66%, 77%, 1.00);
 }
 .item2{
     max-width: auto; 
     margin: "20px"; 
     padding: 20; 
-    background-color: hsl(273, 100%, 80%);
+    background-color: hsla(330, 66%, 77%, 1.00);
 }
 .item3{
     max-width: auto; 
@@ -55,11 +55,12 @@ input, textarea{
   display: grid;
   grid-template-columns: auto auto auto;
   gap: 10px;
+  padding-top: 60px;
   /* background-color: dodgerblue; */
   /* padding: 10px; */
 }
 fieldset{
-    border-color: hsl(308, 100%, 67%);
+    border-color: #9b114f;
     border-style: solid;
 }
 fieldset input{
@@ -78,6 +79,7 @@ fieldset input{
   /* color: #000; */
   background-size: 100%;
   border: none;
+
 }
 /* 
 .prescription-container * {
@@ -85,5 +87,15 @@ fieldset input{
   z-index: 2;
 } */
 
-
+.pad-container p{
+    font-size: 15px;
+}
+.navHead button{
+    background-Color: #9b114f;
+    border: none;
+    margin-Left:10px;
+    padding: 8px 12px;
+    font-Size: 14px;
+    color:white; 
+}
 
