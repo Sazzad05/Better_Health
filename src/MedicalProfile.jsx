@@ -37,7 +37,7 @@ export default function MedicalProfile({ data, setData }) {
   };
 
   return (
-    <section className="left-box">
+    <section className="left-box" style={{ padding: 20, marginTop: 20 }}>
       <h2>Medical Profile</h2>
 
       {/* Existing Diseases with Checkboxes */}

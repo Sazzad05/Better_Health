@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import "./App.css";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import PersonalDetails from "./PersonalDetails";
 import MedicalProfile from "./MedicalProfile";
@@ -9,7 +8,8 @@ import DiseaseBasedFoodSuggestions from "./DiseaseBasedFoodSuggestions";
 import PdfExporter from "./PdfExporter";
 import PrescriptionTemplate from "./PrescriptionTemplate";
 import Prescription from "./Prescription";
-import PrescribeDiet from "./PrescribeDiet"; // NEW IMPORT
+import PrescribeDiet from "./PrescribeDiet";
+import PrescribeMedication from "./PrescribeMedication";
 import NavHead from "./NavHead";
 
 export default function App() {
@@ -20,6 +20,7 @@ export default function App() {
     patientId: 1,
     patientName: "",
     patientPhone: "",
+    bloodPressure: "",
     age: "",
     gender: "male",
     weight: "",
@@ -45,12 +46,11 @@ export default function App() {
     familyMedicalHistory: "",
   });
 
-  const [dietPlan, setDietPlan] = useState([]); // NEW STATE
+  const [dietPlan, setDietPlan] = useState([]);
+  const [medicationPlan, setMedicationPlan] = useState([]);
 
-  const medications = [
-    { name: "Paracetamol", dosage: "500 mg", frequency: "3 times a day" },
-    { name: "Vitamin D", dosage: "1000 IU", frequency: "Once a day" },
-  ];
+  // NEW STATE: which component to show in item2
+  const [activeSection, setActiveSection] = useState("medicalProfile"); // default
 
   const handleNextPatient = () => {
     const nextId = patientCounter + 1;
@@ -59,6 +59,7 @@ export default function App() {
       patientId: nextId,
       patientName: "",
       patientPhone: "",
+      bloodPressure: "",
       age: "",
       gender: "male",
       weight: "",
@@ -82,12 +83,14 @@ export default function App() {
       allergies: "",
       familyMedicalHistory: "",
     });
-    setDietPlan([]); // RESET DIET PLAN
+    setDietPlan([]);
+    setMedicationPlan([]);
+    setActiveSection("medicalProfile"); // reset toggle to default on next patient
   };
 
   return (
     <>
-      <NavHead pdfRef={pdfRef} onNextPatient={handleNextPatient}/>
+      <NavHead pdfRef={pdfRef} onNextPatient={handleNextPatient} />
 
       <div className="grid-container">
         {/* Left Section */}
@@ -98,9 +101,54 @@ export default function App() {
 
         {/* Right Section */}
         <div className="item2">
-          <MedicalProfile data={medicalProfile} setData={setMedicalProfile} />
+          {/* Toggle buttons */}
+          <div className="toggle-buttons" style={{ marginBottom: "10px" }}>
+            <button
+              onClick={() => setActiveSection("medicalProfile")}
+              style={{
+                backgroundColor: activeSection === "medicalProfile" ? "#9b114f" : "hsla(330, 66%, 90%, 1.00)",
+                color: activeSection === "medicalProfile" ? "white" : "black",                
+              }}
+            >
+              Medical Profile
+            </button>
 
-          <PrescribeDiet dietPlan={dietPlan} setDietPlan={setDietPlan} /> {/* NEW */}
+            <button
+              onClick={() => setActiveSection("prescribeDiet")}
+              style={{
+                backgroundColor: activeSection === "prescribeDiet" ? "#9b114f" : "hsla(330, 66%, 90%, 1.00)",
+                color: activeSection === "prescribeDiet" ? "white" : "black",
+              }}
+            >
+              Diet Plan
+            </button>
+
+            <button
+              onClick={() => setActiveSection("prescribeMedication")}
+              style={{
+                backgroundColor: activeSection === "prescribeMedication" ? "#9b114f" : "hsla(330, 66%, 90%, 1.00)",
+                color: activeSection === "prescribeMedication" ? "white" : "black",
+              }}
+            >
+              Medication Plan
+            </button>
+          </div>
+
+          {/* Components always rendered but hidden/shown */}
+          <div style={{ display: activeSection === "medicalProfile" ? "block" : "none" }}>
+            <MedicalProfile data={medicalProfile} setData={setMedicalProfile} />
+          </div>
+
+          <div style={{ display: activeSection === "prescribeDiet" ? "block" : "none" }}>
+            <PrescribeDiet dietPlan={dietPlan} setDietPlan={setDietPlan} />
+          </div>
+
+          <div style={{ display: activeSection === "prescribeMedication" ? "block" : "none" }}>
+            <PrescribeMedication
+              medicationPlan={medicationPlan}
+              setMedicationPlan={setMedicationPlan}
+            />
+          </div>
         </div>
 
         {/* PDF Content */}
@@ -115,13 +163,13 @@ export default function App() {
           }}
         >
           <PrescriptionTemplate
-            clinicName="Healthyou "
-            doctorName="Tasmia Afsin Tisha "
+            clinicName="Healthyou"
+            doctorName="Tasmia Afsin Tisha"
             doctordesignation="Clinical Dietitian & Nutritionist"
             doctordegree1="BSc (Hons) in Food and Nutrition."
             doctordegree2="MSc in Food and Nutrition."
             doctorCertification1="Certification in CCND (BADN)"
-            doctorCertification2="Certified Fitness and Nutrition Coach ( NESTA - California, USA)"
+            doctorCertification2="Certified Fitness and Nutrition Coach (NESTA - California, USA)"
             doctorPhone="01940175796"
             doctorEmail="tasmiatisha143@gmail.com"
             patientName={personalDetails.patientName}
@@ -134,11 +182,11 @@ export default function App() {
               month: "long",
               year: "numeric",
             })}
-            medications={medications}
+            medications={medicationPlan}
             notes="Take medication after meals. Drink plenty of water."
             personalDetails={personalDetails}
             medicalProfile={medicalProfile}
-            dietPlan={dietPlan} // NEW PROP
+            dietPlan={dietPlan}
           />
         </div>
       </div>

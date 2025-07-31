@@ -33,14 +33,13 @@ export default function BasicHealthMetrics({ personalDetails }) {
     return "Obese";
   };
 
-  // Color for BMI interpretation (green if normal, red if not)
   const bmiColor = (bmi) => {
     if (!bmi) return "black";
     const val = parseFloat(bmi);
     return val >= 18.5 && val < 25 ? "green" : "red";
   };
 
-  // BMR calculation using Mifflin-St Jeor
+  // BMR calculation
   const bmr =
     heightInCm && weight && age
       ? gender === "male"
@@ -76,16 +75,13 @@ export default function BasicHealthMetrics({ personalDetails }) {
     }
   };
 
-  // Color for Body Fat % (green if fitness or better, red otherwise)
   const bodyFatColor = (bf) => {
     if (!bf) return "black";
     const val = parseFloat(bf);
     if (gender === "male") {
-      if (val >= 6 && val < 18) return "green";
-      return "red";
+      return val >= 6 && val < 18 ? "green" : "red";
     } else {
-      if (val >= 14 && val < 25) return "green";
-      return "red";
+      return val >= 14 && val < 25 ? "green" : "red";
     }
   };
 
@@ -107,7 +103,6 @@ export default function BasicHealthMetrics({ personalDetails }) {
     }
   };
 
-  // Color for Waist-to-Hip Ratio (green if low risk, red otherwise)
   const whrColor = (ratio) => {
     if (!ratio) return "black";
     const val = parseFloat(ratio);
@@ -118,7 +113,7 @@ export default function BasicHealthMetrics({ personalDetails }) {
     }
   };
 
-  // TDEE (Total Daily Energy Expenditure)
+  // TDEE
   const activityMultipliers = {
     sedentary: 1.2,
     light: 1.375,
@@ -135,34 +130,44 @@ export default function BasicHealthMetrics({ personalDetails }) {
     veryActive: "Very Active (very hard exercise & physical job)",
   };
 
-  const tdee = bmr ? (bmr * activityMultipliers[activityLevel || "sedentary"]).toFixed(0) : null;
+  const tdee = bmr
+    ? (bmr * activityMultipliers[activityLevel || "sedentary"]).toFixed(0)
+    : null;
+
+  // Protein Calculation
+  const proteinLow = weight ? (weight * 0.8).toFixed(1) : null;
+  const proteinHigh = weight ? (weight * 2.0).toFixed(1) : null;
+
+  // Fat Calculation
+  const fatLow = tdee ? (tdee * 0.2 / 9).toFixed(1) : null;
+  const fatHigh = tdee ? (tdee * 0.35 / 9).toFixed(1) : null;
+
+  // Carbohydrate Calculation
+  const carbLow = tdee ? (tdee * 0.45 / 4).toFixed(1) : null;
+  const carbHigh = tdee ? (tdee * 0.65 / 4).toFixed(1) : null;
 
   return (
     <section className="left-box">
-      {/* <h2>Basic Health Metrics</h2> */}
-
       <p>
         <strong>BMI:</strong> {bmi || "--"}
         <br />
-        <em
-          className="calculationInterpretations"
-          style={{ color: bmiColor(bmi) }}
-        >
-          {bmi
-            ? `(Ideal: 18.5 – 24.9) ${getBmiCategory(bmi)}`
-            : "--"}
+        <em style={{ color: bmiColor(bmi) }} className="calculationInterpretations">
+          {getBmiCategory(bmi)}<br />
+          {bmi ? <>Ideal BMI: 18.5 – 24.9</> : "--"}
+          {heightInCm ? (
+            <span style={{ display: "block" }}>
+              Ideal weight: {Math.round(18.5 * (heightInCm / 100) ** 2)}kg –{" "}
+              {Math.round(24.9 * (heightInCm / 100) ** 2)}kg
+            </span>
+          ) : null}
         </em>
       </p>
-      <br />
 
       <p>
         <strong>BMR:</strong> {bmr ? `${Math.round(bmr)} kcal/day` : "--"}
         <br />
-        <em className="calculationInterpretations">
-          {getBmrInterpretation(bmr)}
-        </em>
+        <em className="calculationInterpretations">{getBmrInterpretation(bmr)}</em>
       </p>
-      <br />
 
       <p>
         <strong>TDEE:</strong> {tdee ? `${tdee} kcal/day` : "--"}
@@ -171,30 +176,78 @@ export default function BasicHealthMetrics({ personalDetails }) {
           {activityLabel[activityLevel] || "Unknown activity level"}
         </em>
       </p>
-      <br />
 
       <p>
         <strong>Body Fat %:</strong> {bodyFat || "--"}
         <br />
-        <em
-          className="calculationInterpretations"
-          style={{ color: bodyFatColor(bodyFat) }}
-        >
+        <em style={{ color: bodyFatColor(bodyFat) }} className="calculationInterpretations">
           {bodyFat && getBodyFatCategory(bodyFat)}
         </em>
       </p>
-      <br />
 
       <p>
         <strong>Waist-to-Hip Ratio:</strong> {waistHipRatio || "--"}
         <br />
-        <em
-          className="calculationInterpretations"
-          style={{ color: whrColor(waistHipRatio) }}
-        >
+        <em style={{ color: whrColor(waistHipRatio) }} className="calculationInterpretations">
           {waistHipRatio && getWhRatioCategory(waistHipRatio)}
         </em>
       </p>
+
+      {/* Summary Table */}
+      {/* {(tdee && proteinLow && proteinHigh && fatLow && fatHigh && carbLow && carbHigh) && ( */}
+        <div style={{ marginTop: "20px" }}>
+          <h4 style={{ marginBottom: "10px" }}>Macronutrient Summary</h4>
+          <table
+            style={{
+              width: "100%",
+              borderCollapse: "collapse",
+              textAlign: "left",
+              fontSize: "14px",
+            }}
+          >
+            <thead>
+              <tr style={{ backgroundColor: "rgba(139, 15, 71, 1)",color:"white" }}>
+                <th style={{ padding: "8px", border: "1px solid rgba(139, 15, 71, 1)" }}>Metric / Day</th>
+                <th style={{ padding: "8px", border: "1px solid rgba(139, 15, 71, 1)" }}>Value / Day</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style={{ padding: "4px", border: "1px solid rgba(139, 15, 71, 1)" }}>
+                  Total Calorie Needs
+                </td>
+                <td style={{ padding: "4px", border: "1px solid rgba(139, 15, 71, 1)" }}>
+                  {tdee} kcal
+                </td>
+              </tr>
+              <tr>
+                <td style={{ padding: "4px", border: "1px solid rgba(139, 15, 71, 1)" }}>
+                  Protein Req
+                </td>
+                <td style={{ padding: "4px", border: "1px solid rgba(139, 15, 71, 1)" }}>
+                  {proteinLow}g – {proteinHigh}g
+                </td>
+              </tr>
+              <tr>
+                <td style={{ padding: "4px", border: "1px solid rgba(139, 15, 71, 1)" }}>
+                  Fat Req
+                </td>
+                <td style={{ padding: "4px", border: "1px solid rgba(139, 15, 71, 1)" }}>
+                  {fatLow}g – {fatHigh}g
+                </td>
+              </tr>
+              <tr>
+                <td style={{ padding: "4px", border: "1px solid rgba(139, 15, 71, 1)" }}>
+                  Carbohydrate Req
+                </td>
+                <td style={{ padding: "4px", border: "1px solid rgba(139, 15, 71, 1)" }}>
+                  {carbLow}g – {carbHigh}g
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      {/* )} */}
     </section>
   );
 }

@@ -2,9 +2,8 @@ import React from "react";
 import BasicHealthMetrics from "./BasicHealthMetrics";
 import DiseaseBasedFoodSuggestions from "./DiseaseBasedFoodSuggestions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPhoneVolume , faEnvelope } from "@fortawesome/free-solid-svg-icons"; 
+import { faPhoneVolume, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import logo from "./assets/healthyouLogo.png";
-
 
 export default function PrescriptionTemplate({
   personalDetails,
@@ -21,6 +20,7 @@ export default function PrescriptionTemplate({
   patientName,
   patientAge,
   patientGender,
+  patientPhone,
   patientId,
   date,
   medications = [],
@@ -37,7 +37,7 @@ export default function PrescriptionTemplate({
     activityLevel,
     age,
     gender,
-    patientPhone,
+    bloodPressure,
   } = personalDetails;
 
   const { existingDiseases = [] } = medicalProfile;
@@ -65,7 +65,7 @@ export default function PrescriptionTemplate({
       style={{
         width: "210mm",
         minHeight: "297mm",
-        padding: "5mm 5mm 5mm 5mm",
+        padding: "5mm",
         backgroundColor: "#fff",
         fontFamily: "Arial, sans-serif",
         color: "#000",
@@ -76,11 +76,7 @@ export default function PrescriptionTemplate({
       }}
     >
       {/* Header */}
-      <header
-        style={{
-          marginBottom: 20,
-        }}
-      >
+      <header style={{ marginBottom: 20 }}>
         <div
           style={{
             display: "flex",
@@ -88,56 +84,59 @@ export default function PrescriptionTemplate({
             alignItems: "flex-start",
           }}
         >
-          <div style={{ flex: 1, marginRight: 20,color:"white" }}>
+          <div style={{ flex: 1, marginRight: 20, color: "white" }}>
             <h3 style={{ margin: 0 }}>
               {doctorName},
               <br />
             </h3>
-            <p style={{ margin: 0 }}>
+            <p style={{ margin: 0, fontSize: "15px" }}>
               {doctordesignation}
               <br />
               {doctordegree1} | &ensp;
               {doctordegree2} <br />
               {doctorCertification1} | &ensp;
               {doctorCertification2} <br />
-              <FontAwesomeIcon icon={faPhoneVolume} style={{ marginRight: "6px" }} />
+              <FontAwesomeIcon
+                icon={faPhoneVolume}
+                style={{ marginRight: "6px" }}
+              />
               {doctorPhone} | &ensp;
-               <FontAwesomeIcon icon={faEnvelope} style={{ marginRight: "6px" }} />
-               {doctorEmail}
+              <FontAwesomeIcon icon={faEnvelope} style={{ marginRight: "6px" }} />
+              {doctorEmail}
             </p>
           </div>
-          <div style={{ flex: 1, textAlign: "right",maxWidth: "70mm" }}>
+          <div style={{ flex: 1, textAlign: "right", maxWidth: "70mm" }}>
             <img src={logo} alt="Health You Logo" /> <br />
             <strong>Date:</strong> {date} <br />
             <strong>Patient ID:</strong> {String(patientId).padStart(7, "0")}
           </div>
         </div>
 
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "flex-start",
-                  padding: "3mm 0 3mm 5px",
-                  backgroundColor:"hsla(330, 66%, 77%, 1.00)",
-                  borderRadius:"10px",
-                  color:"rgba(139, 15, 71, 1)",
-                  marginTop:"10px",
-                }}
-              >
-                <div style={{ flex: "1 1 80mm "}}>
-                  <strong>Name:</strong> {patientName || "N/A"}
-                </div>
-                <div style={{ flex: "1 1 50mm "}}>
-                  <strong>Phone:</strong> {patientPhone || "N/A"}
-                </div>
-                <div style={{ flex: "1 1 25mm "}}>
-                  <strong>Age:</strong> {age || "--"}
-                </div>
-                <div style={{ flex: "1 1 30mm "}}>
-                  <strong>Gender:</strong> {gender || "--"}
-                </div>
-              </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+            padding: "3mm 0 3mm 5px",
+            backgroundColor: "hsla(330, 66%, 77%, 1.00)",
+            borderRadius: "10px",
+            color: "rgba(139, 15, 71, 1)",
+            marginTop: "10px",
+          }}
+        >
+          <div style={{ flex: "1 1 80mm " }}>
+            <strong>Name:</strong> {patientName || "N/A"}
+          </div>
+          <div style={{ flex: "1 1 50mm " }}>
+            <strong>Phone:</strong> {patientPhone || "N/A"}
+          </div>
+          <div style={{ flex: "1 1 25mm " }}>
+            <strong>Age:</strong> {age || "--"}
+          </div>
+          <div style={{ flex: "1 1 30mm " }}>
+            <strong>Gender:</strong> {gender || "--"}
+          </div>
+        </div>
       </header>
 
       {/* Body: 2 columns */}
@@ -149,16 +148,23 @@ export default function PrescriptionTemplate({
             borderRight: "1px solid #999",
             paddingRight: 20,
             boxSizing: "border-box",
-            maxWidth: "70mm",
+            maxWidth: "80mm",
           }}
         >
           <h3>Patient Profile</h3>
           <p style={{ margin: 10 }}>
-            <strong>Weight:</strong> {weight || "--"} kg<br />
-            <strong>Height:</strong> {formattedHeight || "--"}<br />
-            <strong>Waist:</strong> {bodyMeasurements?.waist || "--"} inch<br />
-            <strong>Hips:</strong> {bodyMeasurements?.hips || "--"} inch<br />
-            <strong>Chest:</strong> {bodyMeasurements?.chest || "--"} inch<br />
+            <strong>Weight:</strong> {weight || "--"} kg
+            <br />
+            <strong>Height:</strong> {formattedHeight || "--"}
+            <br />
+            <strong>Waist:</strong> {bodyMeasurements?.waist || "--"} inch
+            <br />
+            <strong>Hips:</strong> {bodyMeasurements?.hips || "--"} inch
+            <br />
+            <strong>Chest:</strong> {bodyMeasurements?.chest || "--"} inch
+            <br />
+            <strong>Blood Pressure:</strong> {bloodPressure || "--"} mmHg
+            <br />
             <strong>Activity Level:</strong> {activityLevel || "--"}
           </p>
 
@@ -194,7 +200,6 @@ export default function PrescriptionTemplate({
           {/* Diet Plan Section */}
           {dietPlan.length > 0 && (
             <>
-              
               <h3>Diet Plan</h3>
               <br />
               {dietPlan.map((slot, index) => (
@@ -211,6 +216,31 @@ export default function PrescriptionTemplate({
                   </ul>
                 </div>
               ))}
+            </>
+          )}
+
+          {/* Medication Plan Section */}
+          {medications.length > 0 && (
+            <>
+              <h3>Medication Plan</h3>
+              <br />
+              <ul style={{ paddingLeft: "20px" }}>
+                {medications.map((med, index) => (
+                  <li key={index} style={{ marginBottom: "6px" }}>
+                    💊 <strong>{med.medicine}</strong>
+                    {med.duration && med.durationUnit
+                      ? ` | ${med.duration} ${med.durationUnit}`
+                      : ""}
+                    {" | "}{med.timing}
+                    {med.description && (
+                      <>
+                        {/* <br /> */}
+                         {" | "}{med.description}
+                      </>
+                    )}
+                  </li>
+                ))}
+              </ul>
             </>
           )}
 

@@ -156,7 +156,7 @@ export default function PrescribeDiet({ dietPlan, setDietPlan }) {
   };
 
   return (
-    <section style={{ padding: 20, border: "1px solid #ccc", borderRadius: 8, marginTop: 20 }}>
+    <section style={{ padding: 20, marginTop: 20 }}>
       <h2>Prescribe Diet</h2>
 
       <label>
@@ -214,13 +214,13 @@ export default function PrescribeDiet({ dietPlan, setDietPlan }) {
               placeholder="Quantity"
               value={item.quantity}
               onChange={(e) => updateItem(index, "quantity", e.target.value)}
-              style={{ marginRight: 10, padding: 5, width: 80 }}
+              style={{ marginRight: 10, padding: 5, width: 30 }}
             />
 
             <select
               value={item.unit}
               onChange={(e) => updateItem(index, "unit", e.target.value)}
-              style={{ marginRight: 10, padding: 5 }}
+              style={{ marginRight: 10, padding: 5,width: 70 }}
             >
               {allowedUnits.map((u) => (
                 <option key={u} value={u}>

@@ -1,6 +1,5 @@
 import React from "react";
 import './App.css';
-// import './index.css';
 
 export default function PersonalDetails({ data, setData }) {
   const updateBodyMeasurement = (field, value) => {
@@ -17,10 +16,10 @@ export default function PersonalDetails({ data, setData }) {
       <label>
         Patient ID:
         <input
-            type="text"
-            value={String(data.patientId).padStart(7, '0')} // 👈 7-digit formatting
-            readOnly
-            style={{ marginLeft: 10, padding: 5, width: 120, background: "#9b114f", color: "white" }}
+          type="text"
+          value={String(data.patientId).padStart(7, '0')} // 👈 7-digit formatting
+          readOnly
+          style={{ marginLeft: 10, padding: 5, width: 120, background: "#9b114f", color: "white" }}
         />
       </label>
 
@@ -53,7 +52,6 @@ export default function PersonalDetails({ data, setData }) {
       <br /><br />
 
       <label>
-      
         Age:
         <input
           type="number"
@@ -86,7 +84,6 @@ export default function PersonalDetails({ data, setData }) {
         </label>
       </label>
 
-
       <br /><br />
 
       <label>
@@ -105,67 +102,69 @@ export default function PersonalDetails({ data, setData }) {
 
       <fieldset>
         <legend>
-        Height Unit:
-        <label style={{ marginLeft: 10 }} >
-          <input
-            type="radio"
-            value="cm"
-            checked={data.heightUnit === "cm"}
-            onChange={() => setData({ ...data, heightUnit: "cm" })}
-          />
-          &nbsp;cm
-        </label>
-        <label style={{ marginLeft: 10 }}>
-          <input
-            type="radio"
-            value="ft"
-            checked={data.heightUnit === "ft"}
-            onChange={() => setData({ ...data, heightUnit: "ft" })}
-          />
-          &nbsp;ft/in
-        </label>
-      </legend>
-
-      {data.heightUnit === "cm" ? (
-        <label style={{ display: "block"}}>
-          Height (cm):
-          <input
-            type="number"
-            min="30"
-            max="250"
-            value={data.heightCm}
-            onChange={(e) => setData({ ...data, heightCm: e.target.value })}
-            style={{ marginLeft: 10, padding: 5, width: 100 }}
-          />
-        </label>
-      ) : (
-        <div  style={{ display: "block"}}>
-          <label>
-            Feet:
+          Height Unit:
+          <label style={{ marginLeft: 10 }} >
             <input
-              type="number"
-              min="0"
-              max="8"
-              value={data.heightFeet}
-              onChange={(e) => setData({ ...data, heightFeet: e.target.value })}
-              style={{ marginLeft: 10, padding: 5, width: "20%", marginRight:10 }}
-            /> 
+              type="radio"
+              value="cm"
+              checked={data.heightUnit === "cm"}
+              onChange={() => setData({ ...data, heightUnit: "cm" })}
+            />
+            &nbsp;cm
           </label>
-          <label>
-            Inches:
+          <label style={{ marginLeft: 10 }}>
+            <input
+              type="radio"
+              value="ft"
+              checked={data.heightUnit === "ft"}
+              onChange={() => setData({ ...data, heightUnit: "ft" })}
+            />
+            &nbsp;ft/in
+          </label>
+        </legend>
+
+        {data.heightUnit === "cm" ? (
+          <label style={{ display: "block"}}>
+            Height (cm):
             <input
               type="number"
-              min="0"
-              max="11"
-              value={data.heightInches}
-              onChange={(e) => setData({ ...data, heightInches: e.target.value })}
-              style={{ marginLeft: 10, padding: 5, width: "20%" }}
+              min="30"
+              max="250"
+              value={data.heightCm}
+              onChange={(e) => setData({ ...data, heightCm: e.target.value })}
+              style={{ marginLeft: 10, padding: 5, width: 100 }}
             />
           </label>
-        </div>
-      )}
+        ) : (
+          <div  style={{ display: "block"}}>
+            <label>
+              Feet:
+              <input
+                type="number"
+                min="0"
+                max="8"
+                value={data.heightFeet}
+                onChange={(e) => setData({ ...data, heightFeet: e.target.value })}
+                style={{ marginLeft: 10, padding: 5, width: "20%", marginRight:10 }}
+              /> 
+            </label>
+            <label>
+              Inches:
+              <input
+                type="number"
+                min="0"
+                max="11"
+                value={data.heightInches}
+                onChange={(e) => setData({ ...data, heightInches: e.target.value })}
+                style={{ marginLeft: 10, padding: 5, width: "20%" }}
+              />
+            </label>
+          </div>
+        )}
       </fieldset>
+
       <br />
+
       <fieldset>
         <legend>Body Measurements (inch)</legend>
         <label>
@@ -196,7 +195,19 @@ export default function PersonalDetails({ data, setData }) {
           />
         </label>
       </fieldset>
+      <br />
+        <label>
+        Blood Pressure (BP):
+        <input
+          type="text"
+          value={data.bloodPressure || ""}
+          onChange={(e) => setData({ ...data, bloodPressure: e.target.value })}
+          placeholder="e.g., 120/80"
+          style={{ marginLeft: 10, padding: 5, width: 100 }}
+        />
+      </label>
 
+      <br />
       <br />
 
       <label>
@@ -215,30 +226,6 @@ export default function PersonalDetails({ data, setData }) {
       </label>
 
       <br />
-
-      {/* <label>
-        Exercise Type:
-        <input
-          type="text"
-          value={data.exerciseType}
-          onChange={(e) => setData({ ...data, exerciseType: e.target.value })}
-          placeholder="e.g., Running"
-          style={{width: "100%", padding: "5px 0px 5px 5px"}}
-        />
-      </label> */}
-
-      <br />
-
-      {/* <label>
-        Exercise Timing:
-        <input
-          type="text"
-          value={data.exerciseTiming}
-          onChange={(e) => setData({ ...data, exerciseTiming: e.target.value })}
-          placeholder="e.g., Morning"
-          style={{width: "100%", padding: "5px 0px 5px 5px"}}
-        />
-      </label> */}
     </section>
   );
 }
