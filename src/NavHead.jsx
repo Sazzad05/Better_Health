@@ -9,20 +9,7 @@ import logo from "./assets/healthyouLogo.png";
 
 const NavHead = ({ pdfRef,onNextPatient }) => {
   return (
-    <div className="navHead" style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            height: "60px", /* or whatever height you prefer */
-            backgroundColor: "hsla(330, 66%, 90%, 1.00)", /* or your preferred background */
-            zIndex: 9999, /* ensures it's above other elements */
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "0 20px",
-            boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
-          }}>
+    <div className="navHead" style={{position: "fixed"}}>
             <img src={logo} alt="Health You Logo" />
             {/* <h1>Health & Nutrition Dashboard</h1> */}
             <div>

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
+import loaderGif from "./assets/loadingIcon.gif";
 
 const sheet = "SuggestedFood";
-const url =
-  `https://script.google.com/macros/s/AKfycbxeKiP7lI4_ht6xmkvcZqgdawMmjgQ0lKTB_rAiEwIJ_lEYOPcZe1Sy95B-LQXkVL3U/exec?sheet=${sheet}`;
+const url = `https://script.google.com/macros/s/AKfycbxeKiP7lI4_ht6xmkvcZqgdawMmjgQ0lKTB_rAiEwIJ_lEYOPcZe1Sy95B-LQXkVL3U/exec?sheet=${sheet}`;
 
 export default function MedicalProfile({ data, setData }) {
   const [commonDiseases, setCommonDiseases] = useState([]);
@@ -16,7 +16,9 @@ export default function MedicalProfile({ data, setData }) {
           return;
         }
 
-        const uniqueDiseases = [...new Set(raw.map((row) => row.Disease?.trim()))]
+        const uniqueDiseases = [
+          ...new Set(raw.map((row) => row.Disease?.trim())),
+        ]
           .filter(Boolean)
           .sort();
 
@@ -37,7 +39,7 @@ export default function MedicalProfile({ data, setData }) {
   };
 
   return (
-    <section className="left-box" style={{ padding: 20, marginTop: 20 }}>
+    <section style={{ padding: "0 20" }}>
       <h2>Medical Profile</h2>
 
       {/* Existing Diseases with Checkboxes */}
@@ -52,7 +54,23 @@ export default function MedicalProfile({ data, setData }) {
           }}
         >
           {commonDiseases.length === 0 ? (
-            <p>Loading diseases...</p>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "100%",
+                margin: "20px 0",
+              }}
+            >
+              <img
+                src={loaderGif}
+                alt="Loading..."
+                style={{ width: "50px", height: "50px", marginBottom: "10px" }}
+              />
+              <p>Loading diseases...</p>
+            </div>
           ) : (
             commonDiseases.map((disease) => (
               <label key={disease} style={{ width: "200px" }}>

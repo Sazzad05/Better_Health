@@ -1,114 +1,178 @@
-*{
-    margin: 0px;
-    font-family: Arial, Helvetica, sans-serif;
+* {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Chrome, Safari, Edge, Opera */
+
+/* Hide number arrows in inputs */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-
-input, textarea, select{
-    background-color: rgb(230, 214, 221);
-    border: none;
-    border-radius: 5px;
+input, textarea, select {
+  background-color: rgb(230, 214, 221);
+  border: none;
+  border-radius: 5px;
 }
 
-.left-box{
-    padding: 10px;
-    /* margin-bottom: 0px; */
-    
-  
+/* Layout Sections */
+.left-box {
+  padding: 10px;
 }
 
-.left-box h2{
-    margin-bottom: 10px;
-}
-.left-box .calculationInterpretations{
-    color: green;
-    font-weight: 700;
+.left-box h2 {
+  margin-bottom: 10px;
 }
 
-.item1{
-    max-width: auto; 
-    margin: "20px"; 
-    padding: 20; 
-    background-color: hsla(330, 66%, 77%, 1.00);
-}
-.item2{
-    max-width: auto; 
-    margin: "20px"; 
-    padding: 20; 
-    background-color: hsla(330, 66%, 77%, 1.00);
-}
-.item3{
-    max-width: auto; 
-    margin: "20px"; 
-    padding: 20; 
-    background-color: hsl(202, 100%, 80%);
+.left-box .calculationInterpretations {
+  color: green;
+  font-weight: 700;
 }
 
+.item1,
+.item2,
+.item3 {
+  width: auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.item1 {
+  background-color: hsla(330, 66%, 77%, 1.00);
+}
+.item2 {
+  background-color: hsla(330, 66%, 77%, 1.00);
+}
+.item3 {
+  background-color: hsl(202, 100%, 80%);
+}
+
+/* Responsive Grid */
 .grid-container {
   display: grid;
-  grid-template-columns: auto 39% auto;
+  grid-template-columns: 0.6fr 1fr 1fr;
   gap: 10px;
   padding-top: 60px;
-  /* background-color: dodgerblue; */
-  /* padding: 10px; */
-}
-fieldset{
-    border-color: #9b114f;
-    border-style: solid;
-}
-fieldset input{
-    margin-bottom: 10px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
+/* 2-column layout for tablets/smaller screens */
+@media (max-width: 900px) {
+  .grid-container {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "item1 item2"
+      "item3 item3";
+  }
 
+  .item1 {
+    grid-area: item1;
+  }
+
+  .item2 {
+    grid-area: item2;
+  }
+
+  .item3 {
+    grid-area: item3;
+  }
+}
+
+/* Single-column layout for very small screens */
+@media (max-width: 600px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "item1"
+      "item2"
+      "item3";
+  }
+}
+
+/* Forms */
+fieldset {
+  border-color: #9b114f;
+  border-style: solid;
+}
+
+fieldset input {
+  margin-bottom: 10px;
+}
+
+/* Header Background */
 .pad-container {
   background-image: url("/header.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: top;
+  background-size: 100%;
   position: relative;
   z-index: 1;
-  /* padding: 20px; */
-  /* color: #000; */
-  background-size: 100%;
   border: none;
-
 }
-/* 
-.prescription-container * {
-  position: relative;
-  z-index: 2;
-} */
 
-.pad-container p, ul{
-    font-size: 14px;
+/* Typography and layout for PDF preview */
+.pad-container p, ul, td {
+  font-size: 13px;
+}
+
+/* Navigation header buttons */
+.navHead{
+  
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px; /* or whatever height you prefer */
+  background-Color: hsla(330, 66%, 90%, 1.00); /* or your preferred background */
+  z-Index: 9999; /* ensures it's above other elements */
+  display: flex;
+  align-Items: center;
+  justify-Content: space-between;
+  padding: 0 20px;
+  box-Shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 .navHead button {
-    background-Color: #9b114f;
-    border: none;
-    margin-Left:10px;
-    padding: 8px 12px;
-    font-Size: 14px;
-    color:white; 
+  background-color: #9b114f;
+  border: none;
+  margin-left: 10px;
+  padding: 8px 12px;
+  font-size: 14px;
+  color: white;
 }
 
-.toggle-buttons button{
-    margin-Right: 8px;
-    padding: 8px 16px;
-    border: none;
-    cursor: pointer;
-    border-Radius: 4px;
-    margin: 10px 0 0 10px;
+/* Toggle buttons styling */
+.toggle-buttons button {
+  margin-right: 8px;
+  padding: 8px 16px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  margin: 10px 0 0 10px;
 }
 
-.left-box p{
-    margin-bottom: 10px;
-    
+/* Paragraph spacing */
+.left-box p {
+  margin-bottom: 10px;
 }
+/* Prescribe Diet */
+.dietCart{
+  flex: 1 1 calc(50% - 20px);
+  border: 1px solid #9b114f;
+  border-Radius: 8px;
+  padding: 10px;
+  box-Sizing: border-box;
+  background-Color: hsla(330, 66%, 90%, 1.00);
+}
+.dietCart button{
+  padding: 5px 10px;
+  color: black;
+  border: none;
+  border-Radius: 4px;
+  cursor: pointer;
+}
+
+
+

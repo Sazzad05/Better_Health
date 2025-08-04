@@ -59,8 +59,8 @@ export default function PersonalDetails({ data, setData }) {
           max="120"
           value={data.age}
           onChange={(e) => setData({ ...data, age: e.target.value })}
-          style={{ margin: "0px 10px 0px 5px", padding: 5, width: 30 }}
-        />&nbsp;&nbsp;
+          style={{ margin: "0px 10px 10px 5px", padding: 5, width: 30 }}
+        />&nbsp;&nbsp; <br />
         Gender: &nbsp;
         <label>
           <input
@@ -173,7 +173,7 @@ export default function PersonalDetails({ data, setData }) {
             type="number"
             value={data.bodyMeasurements.waist}
             onChange={(e) => updateBodyMeasurement("waist", e.target.value)}
-            style={{ margin: "0px 10px 0px 5px", padding: 5, width: 30 }}
+            style={{ margin: "0px 10px 10px 5px", padding: 5, width: 30 }}
           /> 
         </label>
         <label>
@@ -182,7 +182,7 @@ export default function PersonalDetails({ data, setData }) {
             type="number"
             value={data.bodyMeasurements.hips}
             onChange={(e) => updateBodyMeasurement("hips", e.target.value)}
-            style={{ margin: "0px 10px 0px 5px", padding: 5, width: 30 }}
+            style={{ margin: "0px 10px 10px 5px", padding: 5, width: 30 }}
           /> 
         </label>
         <label>
@@ -191,7 +191,7 @@ export default function PersonalDetails({ data, setData }) {
             type="number"
             value={data.bodyMeasurements.chest}
             onChange={(e) => updateBodyMeasurement("chest", e.target.value)}
-            style={{ margin: "0px 10px 0px 5px", padding: 5, width: 30 }}
+            style={{ margin: "0px 10px 10px 5px", padding: 5, width: 30 }}
           />
         </label>
       </fieldset>

@@ -76,7 +76,7 @@ export default function PrescribeMedication({ medicationPlan, setMedicationPlan 
   };
 
   return (
-    <section style={{ padding: 20, marginTop: 20 }}>
+    <section style={{ padding: "0 20"}}>
       <h2>Prescribe Medication</h2>
 
       <div

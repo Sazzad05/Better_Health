@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from "react";
+import loaderGif from "./assets/loadingIcon.gif"; // ✅ Make sure this path is correct
 
 const API_BASE =
   "https://script.google.com/macros/s/AKfycbySbEZ_WEp5ShSPQcg_BoHF-K-6I-ovMVLWdQ7iFGOfJjTiuDWi_45fuLq37gZht-ZH/exec";
 
-const generalUnits = ["spoon", "cup", "glass", "ml", "piece", "gm"];
+const generalUnits = [
+  "টেবিল চামচ",
+  "চা চামচ",
+  "কাপ",
+  "গ্লাস",
+  "মিলি",
+  "পিস",
+  "গ্রাম",
+];
 
 const unitOptionsByFood = {
   "Warm water": ["glass", "ml"],
@@ -22,6 +31,7 @@ const unitOptionsByFood = {
 };
 
 export default function PrescribeDiet({ dietPlan, setDietPlan }) {
+  const [loading, setLoading] = useState(true); // ✅ New loading state
   const [timeOptions, setTimeOptions] = useState([]);
   const [defaultTimeBySlot, setDefaultTimeBySlot] = useState({});
   const [defaultFoodBySlot, setDefaultFoodBySlot] = useState({});
@@ -29,10 +39,11 @@ export default function PrescribeDiet({ dietPlan, setDietPlan }) {
 
   const [timeSlot, setTimeSlot] = useState("");
   const [time, setTime] = useState("");
-  const [items, setItems] = useState([{ food: "", quantity: "", unit: "", description: "" }]);
+  const [items, setItems] = useState([
+    { food: "", quantity: "", unit: "", description: "" },
+  ]);
   const [editIndex, setEditIndex] = useState(null);
 
-  // Convert sheet time format to "HH:mm" string
   const convertToTimeString = (value) => {
     const d = new Date(value);
     if (!isNaN(d)) {
@@ -40,12 +51,11 @@ export default function PrescribeDiet({ dietPlan, setDietPlan }) {
       const mm = d.getMinutes().toString().padStart(2, "0");
       return `${hh}:${mm}`;
     }
-    // fallback if not a date string
     return value || "08:00";
   };
 
-  // Fetch sheet data once on mount
   useEffect(() => {
+    setLoading(true);
     fetch(`${API_BASE}?sheet=SuggestedDiet`)
       .then((res) => res.json())
       .then((data) => {
@@ -68,7 +78,6 @@ export default function PrescribeDiet({ dietPlan, setDietPlan }) {
           if (!foodMap[slot]) foodMap[slot] = [];
           foodMap[slot].push(foodItem);
           timeMap[slot] = convertToTimeString(timeStr);
-
           allFoodsSet.add(row.Food);
         });
 
@@ -80,20 +89,27 @@ export default function PrescribeDiet({ dietPlan, setDietPlan }) {
         if (slots.length > 0) {
           setTimeSlot(slots[0]);
           setTime(timeMap[slots[0]] || "");
-          setItems(foodMap[slots[0]] || [{ food: "", quantity: "", unit: "", description: "" }]);
+          setItems(
+            foodMap[slots[0]] || [
+              { food: "", quantity: "", unit: "", description: "" },
+            ]
+          );
         }
       })
-      .catch((err) => console.error("Fetch error:", err));
+      .catch((err) => console.error("Fetch error:", err))
+      .finally(() => setLoading(false)); // ✅ Stop loading
   }, []);
 
-  // When timeSlot changes, update form fields from defaults
   useEffect(() => {
     if (!timeSlot) return;
     setTime(defaultTimeBySlot[timeSlot] || "");
-    setItems(defaultFoodBySlot[timeSlot] || [{ food: "", quantity: "", unit: "", description: "" }]);
+    setItems(
+      defaultFoodBySlot[timeSlot] || [
+        { food: "", quantity: "", unit: "", description: "" },
+      ]
+    );
   }, [timeSlot, defaultTimeBySlot, defaultFoodBySlot]);
 
-  // Update item field and fix unit if food changes
   const updateItem = (index, field, value) => {
     const updated = [...items];
     updated[index][field] = value;
@@ -112,14 +128,18 @@ export default function PrescribeDiet({ dietPlan, setDietPlan }) {
   };
 
   const removeItem = (index) => {
-    if (items.length <= 1) return; // prevent removing last item
+    if (items.length <= 1) return;
     setItems(items.filter((_, i) => i !== index));
   };
 
   const resetForm = () => {
     setTimeSlot(timeOptions[0] || "");
     setTime(defaultTimeBySlot[timeOptions[0]] || "");
-    setItems(defaultFoodBySlot[timeOptions[0]] || [{ food: "", quantity: "", unit: "", description: "" }]);
+    setItems(
+      defaultFoodBySlot[timeOptions[0]] || [
+        { food: "", quantity: "", unit: "", description: "" },
+      ]
+    );
     setEditIndex(null);
   };
 
@@ -155,11 +175,20 @@ export default function PrescribeDiet({ dietPlan, setDietPlan }) {
     setDietPlan(updated);
   };
 
+  if (loading) {
+    return (
+      <div style={{ textAlign: "center", marginTop: "50px" }}>
+        <img src={loaderGif} alt="Loading..." style={{ width: "60px" }} />
+        <p>Loading diet data...</p>
+      </div>
+    );
+  }
+
   return (
-    <section style={{ padding: 20, marginTop: 20 }}>
+    <section style={{ padding: "0 20" }}>
       <h2>Prescribe Diet</h2>
 
-      <label>
+      <label style={{ marginRight: 50 }}>
         Time Slot:
         <select
           value={timeSlot}
@@ -174,9 +203,6 @@ export default function PrescribeDiet({ dietPlan, setDietPlan }) {
         </select>
       </label>
 
-      <br />
-      <br />
-
       <label>
         Time:
         <input
@@ -187,13 +213,18 @@ export default function PrescribeDiet({ dietPlan, setDietPlan }) {
         />
       </label>
 
-      <h4 style={{ marginTop: 20 }}>Diet Items:</h4>
+      <h4 style={{ marginTop: 10 }}>Diet Items:</h4>
       {items.map((item, index) => {
         const allowedUnits = unitOptionsByFood[item.food] || generalUnits;
         return (
           <div
             key={index}
-            style={{ marginBottom: 10, display: "flex", alignItems: "center", flexWrap: "wrap" }}
+            style={{
+              marginBottom: 10,
+              display: "flex",
+              alignItems: "center",
+              flexWrap: "wrap",
+            }}
           >
             <input
               type="text"
@@ -210,7 +241,7 @@ export default function PrescribeDiet({ dietPlan, setDietPlan }) {
             </datalist>
 
             <input
-              type="number"
+              type="text"
               placeholder="Quantity"
               value={item.quantity}
               onChange={(e) => updateItem(index, "quantity", e.target.value)}
@@ -220,7 +251,7 @@ export default function PrescribeDiet({ dietPlan, setDietPlan }) {
             <select
               value={item.unit}
               onChange={(e) => updateItem(index, "unit", e.target.value)}
-              style={{ marginRight: 10, padding: 5,width: 70 }}
+              style={{ marginRight: 10, padding: 5, width: 110 }}
             >
               {allowedUnits.map((u) => (
                 <option key={u} value={u}>
@@ -240,7 +271,12 @@ export default function PrescribeDiet({ dietPlan, setDietPlan }) {
             {items.length > 1 && (
               <button
                 onClick={() => removeItem(index)}
-                style={{ padding: "5px 10px", backgroundColor: "#e74c3c", color: "white", border: "none" }}
+                style={{
+                  padding: "5px 10px",
+                  backgroundColor: "#e74c3c",
+                  color: "white",
+                  border: "none",
+                }}
               >
                 Remove
               </button>
@@ -251,7 +287,13 @@ export default function PrescribeDiet({ dietPlan, setDietPlan }) {
 
       <button
         onClick={addItem}
-        style={{ padding: "5px 10px", backgroundColor: "#3498db", color: "white", border: "none", marginBottom: 15 }}
+        style={{
+          padding: "5px 10px",
+          backgroundColor: "#3498db",
+          color: "white",
+          border: "none",
+          marginBottom: 15,
+        }}
       >
         + Add Item
       </button>
@@ -260,7 +302,13 @@ export default function PrescribeDiet({ dietPlan, setDietPlan }) {
 
       <button
         onClick={addToDietPlan}
-        style={{ backgroundColor: "#2ecc71", color: "white", border: "none", padding: "10px 15px", cursor: "pointer" }}
+        style={{
+          backgroundColor: "#2ecc71",
+          color: "white",
+          border: "none",
+          padding: "10px 15px",
+          cursor: "pointer",
+        }}
         type="button"
       >
         {editIndex !== null ? "Update Prescription" : "+ Add to Prescription"}
@@ -269,25 +317,50 @@ export default function PrescribeDiet({ dietPlan, setDietPlan }) {
       {dietPlan.length > 0 && (
         <div style={{ marginTop: 30 }}>
           <h3>Diet Prescription</h3>
-          {dietPlan.map((slot, index) => (
-            <div key={index} style={{ borderBottom: "1px solid #ccc", marginBottom: 10, paddingBottom: 10 }}>
-              <strong>{slot.timeSlot}</strong> at {slot.time}
-              <ul>
-                {slot.items.map((item, i) => (
-                  <li key={i}>
-                    {item.quantity} {item.unit} of {item.food}
-                    {item.description ? ` (${item.description})` : ""}
-                  </li>
-                ))}
-              </ul>
-              <button onClick={() => handleEdit(index)} style={{ padding: "5px 10px", backgroundColor: "#fffb00ff", color: "Black", border: "none" }}>
-                Edit
-              </button>
-              <button onClick={() => handleDelete(index)} style={{ padding: "5px 10px", backgroundColor: "#e74c3c", color: "white", border: "none" }}>
-                Delete
-              </button>
-            </div>
-          ))}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+            {dietPlan.map((slot, index) => (
+              <div className="dietCart" key={index}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <div>
+                    <strong>{slot.timeSlot}</strong> ➞ {slot.time}
+                  </div>
+                  <div style={{ display: "flex", gap: "8px" }}>
+                    <button
+                      onClick={() => handleEdit(index)}
+                      style={{
+                        backgroundColor: "#fffb00",
+                      }}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(index)}
+                      style={{
+                        backgroundColor: "#e74c3c",
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+                <ul style={{ marginTop: "10px", paddingLeft: "20px" }}>
+                  {slot.items.map((item, i) => (
+                    <li key={i}>
+                      {item.quantity} {item.unit} of {item.food}
+                      {item.description ? ` (${item.description})` : ""}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </section>

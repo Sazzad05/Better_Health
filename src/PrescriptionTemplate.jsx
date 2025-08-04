@@ -196,20 +196,20 @@ export default function PrescriptionTemplate({
           }}
         >
           <DiseaseBasedFoodSuggestions existingDiseases={existingDiseases} />
-
+          
           {/* Diet Plan Section */}
           {dietPlan.length > 0 && (
             <>
-              <h3>Diet Plan</h3>
-              <br />
+              <h3>🗓️ Diet Plan</h3>
+              
               {dietPlan.map((slot, index) => (
                 <div key={index} style={{ marginBottom: 10 }}>
-                  ⏰ <strong>{slot.timeSlot}</strong> at{" "}
+                  🕒 <strong>{slot.timeSlot}</strong> {" ➞ "}
                   <b>{formatTime12(slot.time)}</b>
                   <ul style={{ marginTop: 5 }}>
                     {slot.items.map((item, i) => (
                       <li key={i}>
-                        {item.quantity} {item.unit} of {item.food}
+                        {item.food} ⇢ {item.quantity} {item.unit}
                         {item.description ? ` (${item.description})` : ""}
                       </li>
                     ))}
@@ -222,8 +222,8 @@ export default function PrescriptionTemplate({
           {/* Medication Plan Section */}
           {medications.length > 0 && (
             <>
-              <h3>Medication Plan</h3>
-              <br />
+              <h3>🩺 Medication Plan</h3>
+              
               <ul style={{ paddingLeft: "20px" }}>
                 {medications.map((med, index) => (
                   <li key={index} style={{ marginBottom: "6px" }}>
@@ -254,8 +254,7 @@ export default function PrescriptionTemplate({
               color: "#555",
             }}
           >
-            This prescription is computer generated. Follow medical advice
-            carefully.
+            © Tasmia Afsin Tisha, Clinical Dietitian & Nutritionist
           </div>
         </section>
       </div>
